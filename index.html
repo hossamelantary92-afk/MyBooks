@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبتي الإلكترونية</title>
+    <!-- استدعاء خط Cairo من Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* درجات الألوان الخشبية والدافئة - Dark Mode */
+            --bg-color: #1e120d; /* لون خلفية داكن جداً يميل للبني */
+            --card-bg: #2d1b14; /* لون الخشب الداكن للبطاقات */
+            --text-main: #eaddcf; /* لون نص فاتح ودافئ */
+            --text-muted: #b89c88; /* لون نص ثانوي */
+            --accent-gold: #d4af37; /* لون ذهبي للإضاءة واللمسات */
+            --border-color: #4a2e23;
+            --input-bg: #1a0f0a;
+            
+            /* ألوان حالات القراءة */
+            --status-read: #5a7d5a;
+            --status-reading: #c98a3c;
+            --status-toread: #5c6a7a;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(circle at 50% 0%, #3a2218 0%, transparent 50%); /* إضاءة علوية دافئة */
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        header h1 {
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin-top: 0;
+        }
+
+        /* تنسيق نموذج إضافة كتاب */
+        .add-book-section {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .add-book-section h2 {
+            margin-top: 0;
+            color: var(--accent-gold);
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+
+        input, select, textarea {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+        }
+
+        button {
+            background-color: var(--border-color);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--accent-gold);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* شبكة الكتب */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* بطاقة الكتاب */
+        .book-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 200px;
+            background-color: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            border-bottom: 2px solid var(--border-color);
+            object-fit: cover; /* لضبط مقاس الصورة إذا تمت إضافتها */
+        }
+
+        .book-info {
+            padding: 20px;
+        }
+
+        .reading-status {
+            display: inline-block;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .status-reading { background-color: rgba(201, 138, 60, 0.2); color: var(--status-reading); }
+        .status-read { background-color: rgba(90, 125, 90, 0.2); color: var(--status-read); }
+        .status-toread { background-color: rgba(92, 106, 122, 0.2); color: var(--status-toread); }
+
+        .book-title {
+            margin: 0 0 5px 0;
+            font-size: 1.3em;
+            color: var(--accent-gold);
+        }
+
+        .book-author {
+            margin: 0 0 15px 0;
+            color: var(--text-muted);
+            font-size: 0.95em;
+        }
+
+        .book-rating {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            letter-spacing: 2px;
+        }
+
+        .book-summary {
+            font-size: 0.9em;
+            line-height: 1.7;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>مكتبتي الشخصية</h1>
+            <p>أرشيف القراءات والتقييمات</p>
+        </header>
+
+        <!-- قسم إضافة كتاب جديد -->
+        <div class="add-book-section">
+            <h2>إضافة كتاب جديد</h2>
+            <form id="addBookForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bookTitle">اسم الكتاب</label>
+                        <input type="text" id="bookTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookAuthor">المؤلف</label>
+                        <input type="text" id="bookAuthor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookStatus">حالة القراءة</label>
+                        <select id="bookStatus" required>
+                            <option value="" disabled selected>اختر الحالة...</option>
+                            <option value="reading">أقرأه حالياً</option>
+                            <option value="read">تمت قراءته</option>
+                            <option value="toread">في قائمة الانتظار</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookRating">التقييم (من 5)</label>
+                        <select id="bookRating">
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="1">⭐</option>
+                            <option value="0">بدون تقييم</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="bookSummary">نبذة عن الكتاب / رأيك</label>
+                        <textarea id="bookSummary" rows="3" required></textarea>
+                    </div>
+                </div>
+                <button type="submit">+ أضف إلى المكتبة</button>
+            </form>
+        </div>
+
+        <!-- مساحة عرض الكتب -->
+        <div class="books-grid" id="booksGrid">
+            <!-- سيتم إضافة الكتب هنا برمجياً -->
+        </div>
+    </div>
+
+    <!-- كود JavaScript للتعامل مع النموذج وإضافة الكتب -->
+    <script>
+        document.getElementById('addBookForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة عند الإرسال
+
+            // جلب البيانات من النموذج
+            const title = document.getElementById('bookTitle').value;
+            const author = document.getElementById('bookAuthor').value;
+            const statusValue = document.getElementById('bookStatus').value;
+            const ratingValue = parseInt(document.getElementById('bookRating').value);
+            const summary = document.getElementById('bookSummary').value;
+
+            // تحديد نصوص وفئات حالة القراءة
+            let statusText = '';
+            let statusClass = '';
+            
+            if (statusValue === 'reading') {
+                statusText = 'أقرأه حالياً';
+                statusClass = 'status-reading';
+            } else if (statusValue === 'read') {
+                statusText = 'تمت قراءته';
+                statusClass = 'status-read';
+            } else if (statusValue === 'toread') {
+                statusText = 'في قائمة الانتظار';
+                statusClass = 'status-toread';
+            }
+
+            // توليد النجوم للتقييم
+            let stars = '';
+            for (let i = 0; i < ratingValue; i++) {
+                stars += '★';
+            }
+            for (let i = ratingValue; i < 5; i++) {
+                stars += '☆';
+            }
+            if (ratingValue === 0) stars = 'لم يُقيّم بعد';
+
+            // إنشاء عنصر بطاقة الكتاب
+            const bookCard = document.createElement('div');
+            bookCard.className = 'book-card';
+
+            bookCard.innerHTML = `
+                <div class="book-cover">
+                    <span>بدون غلاف</span>
+                </div>
+                <div class="book-info">
+                    <span class="reading-status ${statusClass}">${statusText}</span>
+                    <h3 class="book-title">${title}</h3>
+                    <p class="book-author">${author}</p>
+                    <div class="book-rating">${stars}</div>
+                    <p class="book-summary">${summary}</p>
+                </div>
+            `;
+
+            // إضافة البطاقة الجديدة إلى شبكة الكتب
+            document.getElementById('booksGrid').prepend(bookCard);
+
+            // تفريغ النموذج بعد الإضافة
+            this.reset();
+        });
+    </script>
+</body>
+</html>
