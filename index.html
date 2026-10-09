@@ -1,233 +1,163 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبتي الإلكترونية</title>
-    <!-- استدعاء خط Cairo من Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            /* درجات الألوان الخشبية والدافئة - Dark Mode */
-            --bg-color: #1e120d; 
-            --card-bg: #2d1b14; 
-            --text-main: #eaddcf; 
-            --text-muted: #b89c88; 
-            --accent-gold: #d4af37; 
-            --border-color: #4a2e23;
-            --input-bg: #1a0f0a;
-            
-            /* ألوان حالات القراءة */
-            --status-read: #5a7d5a;
-            --status-reading: #c98a3c;
-            --status-toread: #5c6a7a;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            background-image: radial-gradient(circle at 50% 0%, #3a2218 0%, transparent 50%); 
-            min-height: 100vh;
-        }
-
-        .container { max-width: 1000px; margin: 0 auto; }
-        header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid var(--border-color); }
-        header h1 { color: var(--accent-gold); text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); margin-bottom: 5px; }
-        header p { color: var(--text-muted); margin-top: 0; }
-
-        .add-book-section { background-color: var(--card-bg); padding: 25px; border-radius: 12px; margin-bottom: 40px; border: 1px solid var(--border-color); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); }
-        .add-book-section h2 { margin-top: 0; color: var(--accent-gold); font-size: 1.4em; margin-bottom: 20px; }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group.full-width { grid-column: span 2; }
-        
-        label { margin-bottom: 5px; font-size: 0.9em; color: var(--text-muted); }
-        input, select, textarea { background-color: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 6px; font-family: 'Cairo', sans-serif; transition: all 0.3s ease; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 8px rgba(212, 175, 55, 0.2); }
-        
-        button { background-color: var(--border-color); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 12px 20px; border-radius: 6px; font-family: 'Cairo', sans-serif; font-weight: bold; font-size: 1em; cursor: pointer; transition: all 0.3s ease; margin-top: 15px; width: 100%; }
-        button:hover { background-color: var(--accent-gold); color: var(--bg-color); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
-
-        .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .book-card { background-color: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
-        .book-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15); border-color: rgba(212, 175, 55, 0.5); }
-        .book-cover { width: 100%; height: 200px; background-color: var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.9em; border-bottom: 2px solid var(--border-color); object-fit: cover; }
-        .book-info { padding: 20px; }
-        
-        .reading-status { display: inline-block; font-size: 0.8em; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; font-weight: 600; }
-        .status-reading { background-color: rgba(201, 138, 60, 0.2); color: var(--status-reading); }
-        .status-read { background-color: rgba(90, 125, 90, 0.2); color: var(--status-read); }
-        .status-toread { background-color: rgba(92, 106, 122, 0.2); color: var(--status-toread); }
-        
-        .book-title { margin: 0 0 5px 0; font-size: 1.3em; color: var(--accent-gold); }
-        .book-author { margin: 0 0 15px 0; color: var(--text-muted); font-size: 0.95em; }
-        .book-rating { color: var(--accent-gold); margin-bottom: 15px; font-size: 1.1em; letter-spacing: 2px; }
-        .book-summary { font-size: 0.9em; line-height: 1.7; color: var(--text-main); margin: 0; }
-
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
-        }
-    </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f1eadf">
+<title>رفّ — مكتبتي الشخصية</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+:root{--ink:#342b23;--muted:#8b7d6d;--paper:#f7f3ec;--cream:#eee5d8;--olive:#64715a;--line:#d9cbb6;--gold:#bc9562;--wood:#ad8057;--shadow:0 18px 50px #45321c1c}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:'Cairo',sans-serif;background:radial-gradient(ellipse at 12% 5%,#fff9 0 10%,transparent 38%),repeating-linear-gradient(92deg,#9a6e4930 0 1px,#c09a7233 2px 4px,#aa7c5426 5px 8px),linear-gradient(130deg,#b28a64,#c09b73 42%,#a97a52);min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.shell{max-width:1320px;margin:auto;padding:32px 42px 72px;position:relative}.topbar{display:flex;align-items:center;justify-content:space-between;color:#fffaf3;margin-bottom:26px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:47px;height:47px;border:1px solid #ffffff70;border-radius:50%;display:grid;place-items:center;padding:8px}.brand-mark svg{width:100%;height:100%}.brand-name{font-family:'Cairo',sans-serif;font-size:28px;line-height:1}.brand-sub{font-size:11px;opacity:.8;letter-spacing:.04em;margin-top:3px}.top-actions{display:flex;align-items:center;gap:10px}.quiet-btn{border:1px solid #ffffff70;color:white;background:#ffffff10;padding:10px 15px;border-radius:999px}
+.workspace{background:var(--paper);border:1px solid #ffffffa8;border-radius:26px;box-shadow:0 28px 90px #3b291d4d;min-height:760px;overflow:hidden;position:relative}.workspace:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 100% 0,#fff8,transparent 38%);pointer-events:none}.hero{padding:42px 48px 34px;position:relative;display:flex;justify-content:space-between;align-items:flex-end;min-height:208px;border-bottom:1px solid #dfd5c8;overflow:hidden}.hero-copy{z-index:1}.eyebrow{color:var(--olive);font-size:12px;font-weight:600;letter-spacing:.05em}.hero h1{font-family:'Cairo',sans-serif;font-weight:700;font-size:43px;margin:5px 0 0;line-height:1.4}.hero p{margin:0;color:var(--muted);font-size:14px}.hero-meta{display:flex;gap:8px;margin-top:18px}.pill{font-size:11px;background:#ebe6dc;color:#786c5b;border-radius:20px;padding:6px 11px}.decoration{position:absolute;left:7%;top:18px;display:flex;align-items:flex-end;gap:18px;opacity:.9}.leaf-art{width:133px;height:145px;opacity:.3}.coffee{width:89px;height:68px;position:relative;margin-bottom:17px}.cup{position:absolute;left:7px;bottom:0;width:61px;height:49px;background:linear-gradient(100deg,#e3d2b6,#faf1df 60%,#d3bea0);border-radius:5px 5px 24px 24px;box-shadow:0 9px 10px #49351d20}.cup:after{content:"";position:absolute;right:-17px;top:9px;width:21px;height:25px;border:5px solid #e0ceb2;border-left:0;border-radius:0 20px 20px 0}.coffee-top{position:absolute;z-index:1;left:9px;top:15px;width:58px;height:9px;border-radius:50%;background:#654b34;box-shadow:inset 0 2px 2px #311e13}.steam{position:absolute;left:27px;top:-7px;width:30px;height:22px;border-top:2px solid #fff8;border-radius:50%;transform:rotate(-20deg)}.steam:after{content:"";position:absolute;left:11px;top:-5px;width:22px;height:18px;border-top:2px solid #fff8;border-radius:50%;transform:rotate(35deg)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:26px 48px 15px;gap:16px}.section-heading{font-family:'Cairo',sans-serif;font-size:25px;margin:0}.section-note{font-size:12px;color:var(--muted);margin-top:2px}.tools{display:flex;align-items:center;gap:10px}.search{position:relative}.search input{width:220px;border:1px solid #ded5c9;background:#fbf8f3;padding:11px 38px 11px 14px;border-radius:11px;outline:none}.search:before{content:'⌕';position:absolute;right:13px;top:5px;font-size:22px;color:#928474}.add-btn{border:0;border-radius:11px;padding:12px 17px;background:var(--olive);color:white;box-shadow:0 6px 13px #66705c35;font-weight:600}.add-btn:hover{background:#515e49}.filters{padding:3px 48px 20px;display:flex;gap:8px}.filter{border:1px solid #ded5c9;background:transparent;color:#796e61;padding:7px 14px;border-radius:999px;font-size:12px}.filter.active{background:#e4e8de;border-color:#d2d9ca;color:#52604c}.grid{padding:0 48px 46px;display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:20px}.book-card{border:1px solid #e5dbce;border-radius:15px;background:#fbf9f4;padding:11px;cursor:pointer;transition:transform .24s,box-shadow .24s;box-shadow:0 4px 13px #402f1b0a;min-width:0}.book-card:hover{transform:translateY(-5px);box-shadow:0 16px 30px #49331e1b}.cover{height:205px;border-radius:9px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:#fff8eb;box-shadow:inset 5px 0 0 #ffffff1b,inset 8px 0 10px #24180c19}.cover:before{content:'';position:absolute;inset:9px;border:1px solid #ffffff45;border-radius:4px}.cover:after{content:'✳';position:absolute;bottom:17px;right:19px;opacity:.5;font-size:16px}.c1{background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=650&q=85');background-size:cover;background-position:center}.c2{background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url('https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=650&q=85');background-size:cover;background-position:center}.c3{background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url('https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=650&q=85');background-size:cover;background-position:center}.c4{background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url('https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=650&q=85');background-size:cover;background-position:center}.c5{background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=650&q=85');background-size:cover;background-position:center}.c6{background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url('https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=650&q=85');background-size:cover;background-position:center}.book-info{padding:11px 4px 3px}.book-info h3{font-size:14px;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.author{font-size:11px;color:var(--muted)}.book-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px}.status{font-size:10px;border-radius:12px;background:#e9eee5;color:#5c6b53;padding:5px 8px}.status.done{background:#f1e9dd;color:#8b6d48}.rating{font-size:10px;color:#b28d5a;letter-spacing:-1px}.empty{grid-column:1/-1;text-align:center;padding:65px 20px;color:#938676}.empty span{font-family:Cairo,sans-serif;font-size:24px;display:block;color:#594d40}
+/* notebook */
+.notes-view{display:none;min-height:760px;background:#eee6d8}.notes-view.visible{display:block}.dashboard.hidden{display:none}.note-top{padding:27px 42px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d5c8b5}.back{border:0;background:transparent;color:#716653;padding:8px 0;font-size:13px}.note-book{display:flex;align-items:center;gap:13px}.mini-cover{width:39px;height:53px;border-radius:4px;background:linear-gradient(135deg,#63705b,#354638);box-shadow:3px 3px 7px #54452d30}.note-title{font-family:'Cairo',sans-serif;font-size:22px;line-height:1.2}.note-author{font-size:11px;color:#887967}.note-actions{display:flex;gap:9px;align-items:center}.saved{font-size:11px;color:#7e8a70}.print-btn{border:1px solid #d1c3ae;background:#faf6ef;color:#716653;border-radius:9px;padding:9px 13px}.notebook-stage{padding:38px 7% 58px;display:flex;justify-content:center;position:relative}.notebook{width:min(800px,100%);min-height:560px;background:#fffdf8;border-radius:5px 16px 16px 5px;box-shadow:0 18px 42px #56432a25;position:relative;padding:54px 70px 50px 86px;transform:rotate(-.25deg);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 35px,#d6e1e4 36px,#fff0 37px);background-position:0 68px}.notebook:before{content:'';position:absolute;right:52px;top:0;bottom:0;width:1px;background:#d7a69b;opacity:.75}.notebook:after{content:'';position:absolute;left:14px;top:0;bottom:0;width:26px;background:radial-gradient(circle at 50% 17px,#d8cdb9 0 3px,transparent 3.6px) 0 0/26px 37px repeat-y;border-right:1px solid #eee5d7}.note-date{font-size:11px;color:#9c8b77;margin-bottom:19px}.note-input{width:100%;height:425px;resize:vertical;border:0;outline:0;background:transparent;color:#40372f;font-family:'Cairo',sans-serif;font-size:20px;line-height:37px;padding:0;direction:rtl}.note-input::placeholder{color:#b3a899}.note-hint{text-align:center;font-size:11px;color:#938573;margin-top:22px}.page-coffee{position:absolute;left:5%;bottom:24px;transform:scale(.85);opacity:.86}.page-leaf{position:absolute;right:4%;top:22px;width:106px;opacity:.12}
+.dialog-backdrop{display:none;position:fixed;inset:0;background:#33271d72;z-index:5;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}.dialog-backdrop.open{display:flex}.dialog{width:min(490px,100%);border-radius:20px;background:#faf7f0;padding:28px;box-shadow:0 30px 90px #21170e55}.dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:19px}.dialog h2{font-family:'Cairo',sans-serif;margin:0;font-size:27px}.close{border:0;background:#ede7dd;border-radius:50%;width:33px;height:33px;color:#756a5d;font-size:20px}.field{display:block;margin-bottom:13px}.field span{display:block;color:#766a5c;font-size:12px;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #ded4c6;background:#fffdf9;padding:11px 12px;border-radius:9px;outline:none;color:var(--ink)}.field input:focus,.field textarea:focus,.field select:focus{border-color:#89947e;box-shadow:0 0 0 3px #89947e20}.field textarea{height:78px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dialog-submit{width:100%;margin-top:7px}
+@media(max-width:760px){.shell{padding:16px 12px 40px}.workspace{border-radius:19px}.hero{padding:29px 24px;min-height:196px}.hero h1{font-size:34px}.decoration{left:3%;transform:scale(.76);transform-origin:left bottom;opacity:.55}.hero-copy{max-width:67%}.toolbar{padding:23px 24px 14px;align-items:flex-start;flex-direction:column}.tools{width:100%}.search{flex:1}.search input{width:100%}.filters{padding:3px 24px 19px;overflow:auto}.grid{padding:0 24px 33px;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cover{height:180px}.topbar{padding:0 4px}.note-top{padding:19px 18px;gap:10px}.notebook-stage{padding:24px 13px}.notebook{padding:44px 46px 40px 54px;min-height:510px}.notebook:before{right:34px}.note-input{font-size:18px}.page-coffee,.page-leaf{display:none}.note-title{font-size:18px}.note-actions .saved{display:none}}
+html[data-theme="dark"]{--ink:#eee5d8;--muted:#b8aa98;--paper:#282a25;--cream:#34362f;--olive:#aab598;--line:#4b4d43;--shadow:0 18px 50px #0005;color-scheme:dark}
+html[data-theme="dark"] body{background:radial-gradient(ellipse at 12% 5%,#ffffff0a 0 10%,transparent 38%),repeating-linear-gradient(92deg,#1c171326 0 1px,#2e241b38 2px 4px,#21191030 5px 8px),linear-gradient(130deg,#403126,#59412d 42%,#38291f)}
+html[data-theme="dark"] .workspace{border-color:#ffffff20;background:var(--paper)}html[data-theme="dark"] .hero{border-color:#45463e}html[data-theme="dark"] .pill{background:#3b3d35;color:#c4b6a1}html[data-theme="dark"] .search input,html[data-theme="dark"] .book-card{background:#30322c;color:var(--ink);border-color:#4a4b42}html[data-theme="dark"] .filter{border-color:#505147;color:#c4b8a6}html[data-theme="dark"] .filter.active{background:#42483c;border-color:#56614c;color:#d2ddc6}html[data-theme="dark"] .status{background:#3e4938;color:#d0ddc5}html[data-theme="dark"] .status.done{background:#514638;color:#e0c7a1}html[data-theme="dark"] .empty{color:#b5a792}html[data-theme="dark"] .notes-view{background:#302e29}html[data-theme="dark"] .note-top{border-color:#4a453b}html[data-theme="dark"] .back,html[data-theme="dark"] .note-author,html[data-theme="dark"] .note-date,html[data-theme="dark"] .note-hint{color:#b8aa98}html[data-theme="dark"] .mini-cover{box-shadow:3px 3px 7px #0008}html[data-theme="dark"] .notebook{background-color:#34342f;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 35px,#49534e 36px,#fff0 37px);color:#ede4d8;box-shadow:0 18px 42px #0005}html[data-theme="dark"] .notebook:before{background:#875b54}html[data-theme="dark"] .notebook:after{background:radial-gradient(circle at 50% 17px,#5c554a 0 3px,transparent 3.6px) 0 0/26px 37px repeat-y;border-color:#454239}html[data-theme="dark"] .note-input{color:#eee5d8}html[data-theme="dark"] .note-input::placeholder{color:#9c9385}html[data-theme="dark"] .dialog{background:#2e302a;color:var(--ink)}html[data-theme="dark"] .field span{color:#c5b9a8}html[data-theme="dark"] .field input,html[data-theme="dark"] .field select,html[data-theme="dark"] .field textarea{background:#393a33;color:var(--ink);border-color:#55564c}html[data-theme="dark"] .close,html[data-theme="dark"] .print-btn{background:#414139;color:#e2d6c5;border-color:#5b584e}html[data-theme="dark"] .add-btn{background:#76836b;color:#fff}html[data-theme="dark"] .quiet-btn{background:#ffffff16;color:#fff}
+.welcome-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap}.quote-box{position:relative;display:flex;align-items:center;gap:10px;width:min(310px,36vw);min-height:70px;padding:10px 17px;border:1px solid #d9cdbb;border-radius:16px;background:#fffaf2b8;box-shadow:0 8px 22px #3b291d10;color:var(--ink);backdrop-filter:blur(6px)}.quote-mark{font-family:Georgia,serif;font-size:42px;line-height:1;color:#b59568;flex:0 0 auto}.quote-close{align-self:flex-end}.quote-box textarea{flex:1;min-width:0;min-height:44px;max-height:82px;resize:vertical;border:0;outline:0;background:transparent;color:var(--ink);font-family:'Cairo',sans-serif;font-size:13px;line-height:1.7}.upload-hint{display:block;color:#988b79;font-size:11px;margin-top:5px}.cover-upload{display:inline-flex;align-items:center;cursor:pointer}
+html[data-theme="dark"] .quote-box{border-color:#555249;background:#35362f;color:var(--ink);box-shadow:0 8px 22px #0002}html[data-theme="dark"] .quote-mark{color:#c5a879}
+@media(max-width:760px){.topbar{display:flex;gap:12px}.welcome-row{align-items:flex-start;gap:9px}.hero-copy{max-width:100%;position:relative;z-index:1}.quote-box{width:min(300px,100%);min-height:58px;padding:6px 12px}.quote-mark{font-size:34px}.quote-box textarea{min-height:38px}}.delete-current{display:inline-flex;align-items:center;gap:7px;border:1px solid #bd8176;background:#f9ece8;color:#955348;border-radius:9px;padding:9px 12px;font:inherit;font-size:12px;cursor:pointer}.delete-current:hover{background:#f2d9d4}html[data-theme="dark"] .delete-current{background:#4a302c;border-color:#79514a;color:#edb6aa}html[data-theme="dark"] .delete-current:hover{background:#5a3732}</style>
 </head>
 <body>
+<div class="shell">
+<header class="topbar"><div class="brand"><div class="brand-mark"><svg viewBox="0 0 48 48" role="img" aria-label="شعار قهوة وكتاب"><path d="M8 13c6-3 12-2 16 2v24c-4-4-10-5-16-2V13Zm32 0c-6-3-12-2-16 2v24c4-4 10-5 16-2V13Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M29 11c1-3 4-4 3-7m4 8c1-3 4-4 3-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M34 5c-2 0-3-1-3-3 2 0 3 1 3 3Zm4 0c0-2 1-3 3-3 0 2-1 3-3 3Z" fill="currentColor"/></svg></div><div><div class="brand-name">قهوة و كتاب</div><div class="brand-sub">حياة واحدة لا تكفيني</div></div></div><button class="quiet-btn" id="themeToggle" type="button" aria-label="تغيير المظهر">☾ &nbsp; الوضع الداكن</button></header>
+<main class="workspace">
+<section class="dashboard" id="dashboard">
+<div class="hero"><div class="hero-copy"><div class="eyebrow">مساحتك الخاصة للقراءة والتأمل</div><div class="welcome-row"><h1>أهلًا بك في مكتبتك</h1><label class="quote-box" aria-label="مساحة كتابة اقتباس"><span class="quote-mark">“</span><textarea id="quoteInput" rows="2" maxlength="180" aria-label="اكتب اقتباسك"></textarea><span class="quote-mark quote-close">”</span></label></div><p>كل كتاب له مكان هنا، وكل فكرة تستحق أن تُكتب.</p><div class="hero-meta"><span class="pill" id="bookCount">٠ كتب في رفّك</span><span class="pill">خذ وقتك، واقرأ على مهل</span></div></div><div class="decoration"><svg class="leaf-art" viewBox="0 0 150 160" fill="none" aria-hidden="true"><path d="M15 151C41 118 63 79 89 19M48 94C27 93 16 79 16 63c20-1 34 8 37 24M67 64c-2-22 10-38 28-43 7 18 1 34-17 46M39 117c-17 1-30-8-36-22 18-6 33-1 41 12M80 41c-3-17 3-29 15-39 13 12 14 25 5 39" stroke="#53614e" stroke-width="2"/><path d="M108 154c3-33 15-59 36-78M124 120c-13 0-22-7-26-18 13-4 23 0 29 9M136 99c0-14 7-23 19-28 5 12 2 22-9 30" stroke="#53614e" stroke-width="2"/></svg><div class="coffee"><span class="steam"></span><span class="cup"></span><span class="coffee-top"></span></div></div></div>
+<div class="toolbar"><div><h2 class="section-heading">على رفوفك</h2><div class="section-note">اختَر كتابًا لفتح دفتر ملاحظاته</div></div><div class="tools"><label class="search"><input id="search" type="search" placeholder="ابحث في مكتبتك..." aria-label="ابحث في مكتبتك"></label><button class="add-btn" id="openAdd">＋ أضف كتابًا</button></div></div>
+<div class="filters"><button class="filter active" data-filter="all">كل الكتب</button><button class="filter" data-filter="reading">أقرأه حاليًا</button><button class="filter" data-filter="done">أنهيته</button><button class="filter" data-filter="queue">على قائمة الانتظار</button></div>
+<div class="grid" id="bookGrid"></div>
+</section>
+<section class="notes-view" id="notesView"><div class="note-top"><button class="back" id="backBtn">← &nbsp; العودة إلى مكتبتي</button><div class="note-book"><div class="mini-cover" id="miniCover"></div><div><div class="note-title" id="noteTitle"></div><div class="note-author" id="noteAuthor"></div></div></div><div class="note-actions"><span class="saved" id="saveState">حُفظت ملاحظاتك</span><label class="print-btn cover-upload" for="changeCover">تغيير الغلاف<input id="changeCover" type="file" accept="image/*" hidden></label><button class="print-btn" id="printBtn">طباعة الدفتر</button><button class="delete-current" id="deleteCurrentBook" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>حذف الكتاب</span></button></div></div><div class="notebook-stage"><svg class="page-leaf" viewBox="0 0 150 160" fill="none"><path d="M15 151C41 118 63 79 89 19M48 94C27 93 16 79 16 63c20-1 34 8 37 24M67 64c-2-22 10-38 28-43 7 18 1 34-17 46M39 117c-17 1-30-8-36-22 18-6 33-1 41 12" stroke="#53614e" stroke-width="2"/></svg><article class="notebook"><div class="note-date" id="noteDate"></div><textarea class="note-input" id="noteInput" placeholder="اكتب هنا ما لفت انتباهك...&#10;&#10;اقتباس، فكرة، سؤال، أو شعور تركه الكتاب فيك."></textarea><div class="note-hint">هذه الصفحة لك — تُحفظ ملاحظاتك وتتزامن تلقائيًا</div></article><div class="coffee page-coffee"><span class="steam"></span><span class="cup"></span><span class="coffee-top"></span></div></div></section>
+</main></div>
+<div class="dialog-backdrop" id="dialog"><form class="dialog" id="bookForm"><div class="dialog-head"><h2>كتاب جديد على الرفّ</h2><button class="close" type="button" id="closeDialog" aria-label="إغلاق">×</button></div><label class="field"><span>اسم الكتاب</span><input name="title" required placeholder="مثال: ساق البامبو"></label><label class="field"><span>المؤلف</span><input name="author" placeholder="اسم المؤلف"></label><div class="row"><label class="field"><span>حالة القراءة</span><select name="status"><option value="reading">أقرأه حاليًا</option><option value="done">أنهيته</option><option value="queue">على قائمة الانتظار</option></select></label><label class="field"><span>التقييم</span><select name="rating"><option value="5">★★★★★</option><option value="4">★★★★</option><option value="3">★★★</option><option value="2">★★</option><option value="1">★</option><option value="0">بدون تقييم</option></select></label></div><label class="field"><span>نبذة قصيرة (اختياري)</span><textarea name="summary" placeholder="ما الذي تريد تذكّره عن هذا الكتاب؟"></textarea></label><label class="field"><span>صورة غلاف الكتاب</span><input name="cover" type="file" accept="image/*"><small class="upload-hint">ارفع صورة الغلاف من جهازك — حتى 12 م.ب</small></label><button class="add-btn dialog-submit" type="submit">أضف إلى مكتبتي</button></form></div>
 
-    <div class="container">
-        <header>
-            <h1>مكتبتي الشخصية</h1>
-            <p>أرشيف القراءات والتقييمات المتزامن</p>
-        </header>
+<!-- سكربت المزامنة وتفعيل الموقع -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        <!-- قسم إضافة كتاب جديد -->
-        <div class="add-book-section">
-            <h2>إضافة كتاب جديد</h2>
-            <form id="addBookForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="bookTitle">اسم الكتاب</label>
-                        <input type="text" id="bookTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="bookAuthor">المؤلف</label>
-                        <input type="text" id="bookAuthor" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="bookStatus">حالة القراءة</label>
-                        <select id="bookStatus" required>
-                            <option value="" disabled selected>اختر الحالة...</option>
-                            <option value="reading">أقرأه حالياً</option>
-                            <option value="read">تمت قراءته</option>
-                            <option value="toread">في قائمة الانتظار</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="bookRating">التقييم (من 5)</label>
-                        <select id="bookRating">
-                            <option value="5">⭐⭐⭐⭐⭐</option>
-                            <option value="4">⭐⭐⭐⭐</option>
-                            <option value="3">⭐⭐⭐</option>
-                            <option value="2">⭐⭐</option>
-                            <option value="1">⭐</option>
-                            <option value="0">بدون تقييم</option>
-                        </select>
-                    </div>
-                    <div class="form-group full-width">
-                        <label for="bookSummary">نبذة عن الكتاب / رأيك</label>
-                        <textarea id="bookSummary" rows="3" required></textarea>
-                    </div>
-                </div>
-                <button type="submit">+ أضف إلى المكتبة</button>
-            </form>
-        </div>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDLnyNJ55eoIstDTcPzHmPqSx2iu3sNRRM",
+        authDomain: "mylibrary-49754.firebaseapp.com",
+        databaseURL: "https://mylibrary-49754-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "mylibrary-49754",
+        storageBucket: "mylibrary-49754.firebasestorage.app",
+        messagingSenderId: "416475385172",
+        appId: "1:416475385172:web:9bf0db97225bf86b708cc1"
+    };
 
-        <!-- مساحة عرض الكتب -->
-        <div class="books-grid" id="booksGrid">
-            <!-- سيتم إضافة الكتب هنا برمجياً من Firebase -->
-        </div>
-    </div>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    <!-- استدعاء Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    let mySecretKey = localStorage.getItem("raff_secret_key");
+    if (!mySecretKey) {
+        mySecretKey = prompt("أدخل الرقم السري لربط مكتبتك بكل أجهزتك:");
+        if (mySecretKey) localStorage.setItem("raff_secret_key", mySecretKey);
+    }
+    const libraryDocRef = mySecretKey ? doc(db, "SecretNotes", mySecretKey) : null;
 
-        // إعدادات Firebase الخاصة بك
-        const firebaseConfig = {
-            apiKey: "AIzaSyDLnyNJ55eoIstDTcPzHmPqSx2iu3sNRRM",
-            authDomain: "mylibrary-49754.firebaseapp.com",
-            databaseURL: "https://mylibrary-49754-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "mylibrary-49754",
-            storageBucket: "mylibrary-49754.firebasestorage.app",
-            messagingSenderId: "416475385172",
-            appId: "1:416475385172:web:9bf0db97225bf86b708cc1"
-        };
+    const initial=[{id:'b1',title:'رسائل من القرآن',author:'أدهم شرقاوي',status:'done',rating:5,color:'c1',summary:''},{id:'b2',title:'فن اللامبالاة',author:'مارك مانسون',status:'reading',rating:4,color:'c2',summary:''},{id:'b3',title:'عالم صوفي',author:'جوستاين غاردر',status:'queue',rating:0,color:'c3',summary:''},{id:'b4',title:'مئة عام من العزلة',author:'غابرييل غارسيا ماركيز',status:'done',rating:5,color:'c4',summary:''},{id:'b5',title:'حديث الصباح',author:'أدهم شرقاوي',status:'reading',rating:4,color:'c5',summary:''},{id:'b6',title:'الأيام',author:'طه حسين',status:'queue',rating:0,color:'c6',summary:''}];
+    const labels={reading:'أقرأه حاليًا',done:'أنهيته',queue:'على قائمة الانتظار'};
+    let books=JSON.parse(localStorage.getItem('raff-books')||'null')||initial;
+    let activeFilter='all',currentBook=null;
+    const savedTheme=localStorage.getItem('raff-theme')||'dark';
+    document.documentElement.dataset.theme=savedTheme;
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    function updateThemeButton(){
+        document.getElementById('themeToggle').textContent=document.documentElement.dataset.theme==='dark'?'☼  الوضع الفاتح':'☾  الوضع الداكن';
+    }
+    const grid=document.getElementById('bookGrid');
+    const digits=n=>String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 
-        // طلب الرقم السري للمزامنة
-        let mySecretKey = localStorage.getItem("library_password");
-        if (!mySecretKey) {
-            mySecretKey = prompt("أدخل الرقم السري الخاص بمكتبتك لربط الأجهزة ببعضها:");
-            if(mySecretKey) {
-                localStorage.setItem("library_password", mySecretKey);
-            } else {
-                alert("لن يتم عرض أو حفظ الكتب بدون الرقم السري.");
-            }
+    // دالة حفظ الكتب (مزامنة محلية وسحابية)
+    async function saveBooks(){
+        localStorage.setItem('raff-books',JSON.stringify(books));
+        if (libraryDocRef) {
+            await setDoc(libraryDocRef, { books: books, quote: document.getElementById('quoteInput').value }, { merge: true });
         }
+    }
 
-        const libraryDocRef = doc(db, "SecretNotes", mySecretKey || "default_locked");
-        let booksArray = []; 
-
-        // المزامنة اللحظية لعرض الكتب
-        if (mySecretKey) {
-            onSnapshot(libraryDocRef, (docSnap) => {
-                const display = document.getElementById("booksGrid");
-                display.innerHTML = ""; 
-                
-                if (docSnap.exists() && docSnap.data().books) {
-                    booksArray = docSnap.data().books;
-                    
-                    booksArray.forEach((book) => {
-                        let statusText = ''; let statusClass = '';
-                        if (book.status === 'reading') { statusText = 'أقرأه حالياً'; statusClass = 'status-reading'; }
-                        else if (book.status === 'read') { statusText = 'تمت قراءته'; statusClass = 'status-read'; }
-                        else if (book.status === 'toread') { statusText = 'في قائمة الانتظار'; statusClass = 'status-toread'; }
-
-                        let stars = '';
-                        for (let i = 0; i < book.rating; i++) stars += '★';
-                        for (let i = book.rating; i < 5; i++) stars += '☆';
-                        if (book.rating === 0) stars = 'لم يُقيّم بعد';
-
-                        display.innerHTML += `
-                            <div class="book-card">
-                                <div class="book-cover">
-                                    <span>${book.title}</span>
-                                </div>
-                                <div class="book-info">
-                                    <span class="reading-status ${statusClass}">${statusText}</span>
-                                    <h3 class="book-title">${book.title}</h3>
-                                    <p class="book-author">${book.author}</p>
-                                    <div class="book-rating">${stars}</div>
-                                    <p class="book-summary">${book.summary}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
+    // استقبال التحديثات من الأجهزة الأخرى
+    if (libraryDocRef) {
+        onSnapshot(libraryDocRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if(data.books) {
+                    books = data.books;
+                    localStorage.setItem('raff-books', JSON.stringify(books));
                 }
-            });
-        }
-
-        // حفظ كتاب جديد
-        document.getElementById('addBookForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); 
-            
-            if (!mySecretKey) {
-                alert("يرجى إدخال الرقم السري أولاً.");
-                return;
+                if(data.quote && document.activeElement !== document.getElementById('quoteInput')) {
+                    document.getElementById('quoteInput').value = data.quote;
+                    localStorage.setItem('raff-quote', data.quote);
+                }
+                if(data.notes) {
+                    for (const [id, note] of Object.entries(data.notes)) {
+                        localStorage.setItem('raff-note-'+id, note);
+                    }
+                    if (currentBook && document.activeElement !== document.getElementById('noteInput')) {
+                        document.getElementById('noteInput').value = data.notes[currentBook.id] || '';
+                    }
+                }
+                render();
             }
-
-            const newBook = {
-                title: document.getElementById('bookTitle').value,
-                author: document.getElementById('bookAuthor').value,
-                status: document.getElementById('bookStatus').value,
-                rating: parseInt(document.getElementById('bookRating').value),
-                summary: document.getElementById('bookSummary').value
-            };
-
-            // إضافة الكتاب في أول المصفوفة
-            booksArray.unshift(newBook);
-
-            // رفع الكتب لقاعدة البيانات
-            await setDoc(libraryDocRef, { books: booksArray });
-            
-            // تفريغ النموذج
-            this.reset();
         });
-    </script>
-</body>
-</html>
+    }
+
+    function render(){
+        let q=document.getElementById('search').value.trim().toLowerCase();
+        let shown=books.filter(b=>(activeFilter==='all'||b.status===activeFilter)&&(!q||(b.title+' '+b.author).toLowerCase().includes(q)));
+        document.getElementById('bookCount').textContent=digits(books.length)+' '+(books.length===1?'كتاب':'كتب')+' في رفّك';
+        grid.innerHTML=shown.length?shown.map((b,i)=>`<article class="book-card" tabindex="0" data-id="${b.id}" aria-label="افتح دفتر ${esc(b.title)}"><div class="cover ${b.color||'c'+((i%6)+1)}" ${b.coverImage?`style="background-image:linear-gradient(180deg,#1b1a1710 8%,#1b1a17c9 100%),url(&quot;${b.coverImage}&quot;);background-size:cover;background-position:center"`:''}></div><div class="book-info"><h3>${esc(b.title)}</h3><div class="author">${esc(b.author||'مؤلف غير محدد')}</div><div class="book-foot"><span class="status ${b.status}">${labels[b.status]}</span><span class="rating">${b.rating?('★'.repeat(+b.rating)+'☆'.repeat(5-(+b.rating))):'بلا تقييم'}</span></div></div></article>`).join(''):`<div class="empty"><span>${q?'لم نعثر على هذا الكتاب':'رفّك ينتظر حكاية جديدة'}</span>${q?'جرّب اسمًا آخر.':'أضف أول كتاب لتبدأ رحلتك.'}</div>`;
+    }
+    function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+    function openBook(id){
+        currentBook=books.find(b=>b.id===id);
+        if(!currentBook)return;
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('notesView').classList.add('visible');
+        document.getElementById('noteTitle').textContent=currentBook.title;
+        document.getElementById('noteAuthor').textContent=currentBook.author||'مؤلف غير محدد';
+        const miniCover=document.getElementById('miniCover');
+        miniCover.className='mini-cover '+(currentBook.color||'');
+        miniCover.style.backgroundImage=currentBook.coverImage?`url("${currentBook.coverImage}")`:'';
+        miniCover.style.backgroundSize='cover';
+        miniCover.style.backgroundPosition='center';
+        document.getElementById('noteInput').value=localStorage.getItem('raff-note-'+id)||'';
+        document.getElementById('noteDate').textContent=new Intl.DateTimeFormat('ar-SA',{dateStyle:'long'}).format(new Date());
+        document.getElementById('saveState').textContent='حُفظت ملاحظاتك';
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function closeBook(){
+        document.getElementById('notesView').classList.remove('visible');
+        document.getElementById('dashboard').classList.remove('hidden');
+        window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function deleteBook(id){
+        const book=books.find(b=>b.id===id);
+        if(!book||!confirm('هل تريد حذف «'+book.title+'» من مكتبتك؟ سيتم حذف ملاحظاته أيضًا.'))return;
+        books=books.filter(b=>b.id!==id);
+        clearTimeout(window.saveTimer);
+        localStorage.removeItem('raff-note-'+id);
+        saveBooks();
+        render();
+        currentBook=null;
+        closeBook();
+    }
+
+    document.getElementById('deleteCurrentBook').addEventListener('click',()=>{if(currentBook)deleteBook(currentBook.id)});
+    grid.addEventListener('click',e=>{let card=e.target.closest('.book-card');if(card)openBook(card.dataset.id)});
+    grid.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.book-card')){e.preventDefault();openBook(e.target.dataset.id)}});
+    document.getElementById('backBtn').onclick=closeBook;
+
+    // حفظ ملاحظات الكتاب مع فايربيز
+    document.getElementById('noteInput').addEventListener('input',e=>{
+        localStorage.setItem('raff-note-'+currentBook.id,e.target.value);
+        document.getElementById('saveState').textContent='جارٍ الحفظ
